@@ -72,6 +72,28 @@ class ProductApiTests(APITestCase):
         response = self.client.get(self.list_url, {"category": "clothing"})
         self.assertEqual([p["name"] for p in response.data], ["Cotton Shirt"])
 
+    def test_negative_price_rejected(self):
+        response = self.client.post(self.list_url, self.valid_payload(price="-1"), format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("price", response.data)
+
+    def test_negative_stock_rejected(self):
+        response = self.client.post(
+            self.list_url, self.valid_payload(stock_quantity=-3), format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("stock_quantity", response.data)
+
+    def test_required_fields(self):
+        response = self.client.post(self.list_url, {}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        for field in ["name", "category", "price", "stock_quantity"]:
+            self.assertIn(field, response.data)
+
+    def test_blank_name_rejected(self):
+        response = self.client.post(self.list_url, self.valid_payload(name="   "), format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_categories_endpoint(self):
         response = self.client.get(f"{self.list_url}categories/")
         self.assertEqual(response.data, ["Clothing", "Electronics"])
