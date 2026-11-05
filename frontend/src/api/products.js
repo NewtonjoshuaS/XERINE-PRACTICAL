@@ -38,3 +38,31 @@ async function request(path, options = {}) {
   }
   return data;
 }
+
+export function getProducts({ search = "", category = "" } = {}) {
+  const params = new URLSearchParams();
+  if (search.trim()) params.set("search", search.trim());
+  if (category) params.set("category", category);
+  const query = params.toString();
+  return request(`/products/${query ? `?${query}` : ""}`);
+}
+
+export function getProduct(id) {
+  return request(`/products/${id}/`);
+}
+
+export function getCategories() {
+  return request("/products/categories/");
+}
+
+export function createProduct(product) {
+  return request("/products/", { method: "POST", body: JSON.stringify(product) });
+}
+
+export function updateProduct(id, product) {
+  return request(`/products/${id}/`, { method: "PUT", body: JSON.stringify(product) });
+}
+
+export function deleteProduct(id) {
+  return request(`/products/${id}/`, { method: "DELETE" });
+}
