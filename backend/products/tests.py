@@ -63,3 +63,15 @@ class ProductApiTests(APITestCase):
         response = self.client.delete(self.detail_url(self.phone.id))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Product.objects.filter(id=self.phone.id).exists())
+
+    def test_search_by_name(self):
+        response = self.client.get(self.list_url, {"search": "smart"})
+        self.assertEqual([p["name"] for p in response.data], ["Smartphone X"])
+
+    def test_filter_by_category(self):
+        response = self.client.get(self.list_url, {"category": "clothing"})
+        self.assertEqual([p["name"] for p in response.data], ["Cotton Shirt"])
+
+    def test_categories_endpoint(self):
+        response = self.client.get(f"{self.list_url}categories/")
+        self.assertEqual(response.data, ["Clothing", "Electronics"])
