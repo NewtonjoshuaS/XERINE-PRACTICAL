@@ -361,3 +361,13 @@ textarea.input {
   color: var(--muted);
   padding: 40px 12px;
 }
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar {
+    grid-template-columns: 1fr;
+  }
+}
