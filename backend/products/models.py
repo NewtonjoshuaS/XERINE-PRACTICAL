@@ -7,9 +7,13 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     category = models.CharField(max_length=100)
     price = models.DecimalField(
-        max_digits=10, decimal_places=2, validators=[MinValueValidator(0)]
+        max_digits=10,
+        decimal_places=2,
+        validators=[MinValueValidator(0, message="Price cannot be negative.")],
     )
-    stock_quantity = models.IntegerField(validators=[MinValueValidator(0)])
+    stock_quantity = models.IntegerField(
+        validators=[MinValueValidator(0, message="Stock quantity cannot be negative.")]
+    )
     image_url = models.URLField(max_length=500, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
