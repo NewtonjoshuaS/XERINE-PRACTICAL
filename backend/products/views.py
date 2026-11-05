@@ -1,4 +1,6 @@
 from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from .models import Product
 from .serializers import ProductSerializer
@@ -24,3 +26,13 @@ class ProductViewSet(viewsets.ModelViewSet):
         if category:
             queryset = queryset.filter(category__iexact=category)
         return queryset
+
+    @action(detail=False, methods=["get"])
+    def categories(self, request):
+        """Distinct category names, used to populate the frontend filter."""
+        names = (
+            Product.objects.order_by("category")
+            .values_list("category", flat=True)
+            .distinct()
+        )
+        return Response(list(names))
