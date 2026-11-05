@@ -8,7 +8,8 @@ import {
   updateProduct,
 } from "./api/products";
 import Alert from "./components/Alert";
-import ProductForm, { EMPTY_PRODUCT } from "./components/ProductForm";
+import ProductForm from "./components/ProductForm";
+import { EMPTY_PRODUCT } from "./emptyProduct";
 import ProductTable from "./components/ProductTable";
 import SearchFilter from "./components/SearchFilter";
 

@@ -1,13 +1,5 @@
 import { useState } from "react";
-
-export const EMPTY_PRODUCT = {
-  name: "",
-  description: "",
-  category: "",
-  price: "",
-  stock_quantity: "",
-  image_url: "",
-};
+import { EMPTY_PRODUCT } from "../emptyProduct";
 
 // Mirrors the backend rules so the user gets instant feedback.
 // The backend still validates everything, because the API can be called directly.
