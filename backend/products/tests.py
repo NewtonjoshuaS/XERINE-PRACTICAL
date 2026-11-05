@@ -96,4 +96,7 @@ class ProductApiTests(APITestCase):
 
     def test_categories_endpoint(self):
         response = self.client.get(f"{self.list_url}categories/")
-        self.assertEqual(response.data, ["Clothing", "Electronics"])
+        self.assertEqual(
+            response.data,
+            [{"category": "Clothing", "count": 1}, {"category": "Electronics", "count": 1}],
+        )

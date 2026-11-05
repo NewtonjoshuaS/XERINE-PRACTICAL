@@ -1,3 +1,4 @@
+from django.db.models import Count
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -29,10 +30,13 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["get"])
     def categories(self, request):
-        """Distinct category names, used to populate the frontend filter."""
-        names = (
-            Product.objects.order_by("category")
-            .values_list("category", flat=True)
-            .distinct()
+        """Each category with its product count, e.g. [{"category": "Home", "count": 3}].
+
+        The frontend uses this for the category dropdown and the overall total.
+        """
+        rows = (
+            Product.objects.values("category")
+            .annotate(count=Count("id"))
+            .order_by("category")
         )
-        return Response(list(names))
+        return Response(list(rows))
