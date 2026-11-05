@@ -75,14 +75,16 @@ class ProductApiTests(APITestCase):
     def test_negative_price_rejected(self):
         response = self.client.post(self.list_url, self.valid_payload(price="-1"), format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("price", response.data)
+        self.assertEqual(response.data["price"], ["Price cannot be negative."])
 
     def test_negative_stock_rejected(self):
         response = self.client.post(
             self.list_url, self.valid_payload(stock_quantity=-3), format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("stock_quantity", response.data)
+        self.assertEqual(
+            response.data["stock_quantity"], ["Stock quantity cannot be negative."]
+        )
 
     def test_required_fields(self):
         response = self.client.post(self.list_url, {}, format="json")
